@@ -27,6 +27,10 @@ import java.util.Set;
 public class MainActivity extends AppCompatActivity implements BluetoothAdapter.LeScanCallback {
 
     public static final String TAG = "bt-pairing-test";
+    private static final String REDMI_SIMON = "00:EC:0A:03:54:78";
+    private static final String IPHONE_SIMON = "88:E9:FE:ED:D7:85";
+    private static final String TERMINAL_SIMON = "9C:28:40:5C:BF:F0";
+
 
     private BluetoothAdapter mBluetoothAdapter;
     private static final int REQUEST_ENABLE_BT = 10;
