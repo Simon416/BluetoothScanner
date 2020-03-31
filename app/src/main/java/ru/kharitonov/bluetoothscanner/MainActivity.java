@@ -70,47 +70,51 @@ public class MainActivity extends AppCompatActivity implements BluetoothAdapter.
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
         registerReceiver(receiver, filter);
-        startScan();
+        //startScan();
 
 
-//        if (Build.VERSION.SDK_INT >= 21) {
-//            mScanCallback = new ScanCallback() {
-//                @Override
-//                public void onScanResult(int callbackType, ScanResult result) {
-//                    super.onScanResult(callbackType, result);
-//
-//                    if (listAddress.isEmpty()) {
-//                        listAddress.add(result.getDevice().getAddress());
-//                    }
-//
-//                    else {
-//                        for (String address : listAddress) {
-//                            if (address.equals(result.getDevice().getAddress())) {
-//                                addMaddress = false;
-//                                return;
-//                            }
-//                            else{
-//                                addMaddress = true;
-//                            }
-//                        }
-//                        if(addMaddress){
-//                            listAddress.add(result.getDevice().getAddress());
-//                            addMaddress = true;
-//                        }
-//                    }
-//
-//                }
-//            };
-//        }
-//
-//        BluetoothManager manager = (BluetoothManager) this.getSystemService(Context.BLUETOOTH_SERVICE);
-//        mBluetoothAdapter = manager.getAdapter();
+        if (Build.VERSION.SDK_INT >= 21) {
+            mScanCallback = new ScanCallback() {
+                @Override
+                public void onScanResult(int callbackType, ScanResult result) {
+                    super.onScanResult(callbackType, result);
+                    if (result.getRssi() > -50) {
+
+                        if (listAddress.isEmpty()) {
+                            listAddress.add(result.getDevice().getAddress());
+                            Log.d(TAG, "ACTION_FOUND: " + result.getDevice().getName() +
+                                    " mRssi" + result.getRssi() +
+                                    " address: " + result.getDevice().getAddress());
+                        } else {
+                            for (String address : listAddress) {
+                                if (address.equals(result.getDevice().getAddress())) {
+                                    addMaddress = false;
+                                    return;
+                                } else {
+                                    addMaddress = true;
+                                }
+                            }
+                            if (addMaddress) {
+                                listAddress.add(result.getDevice().getAddress());
+                                Log.d(TAG, "ACTION_FOUND: " + result.getDevice().getName() +
+                                        " mRssi" + result.getRssi() +
+                                        " address: " + result.getDevice().getAddress());
+                            }
+                        }
+
+                    }
+                }
+            };
+        }
+
+        BluetoothManager manager = (BluetoothManager) this.getSystemService(Context.BLUETOOTH_SERVICE);
+        mBluetoothAdapter = manager.getAdapter();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        //startScanBLE();
+        startScanBLE();
     }
 
     @Override
@@ -159,6 +163,8 @@ public class MainActivity extends AppCompatActivity implements BluetoothAdapter.
 
                 if (listAddress.isEmpty()) {
                     listAddress.add(device.getAddress());
+                    Log.d(TAG, "ACTION_FOUND: " + device.getName() + " address: "+ device.getAddress());
+
                 }
                 else {
                     for (String address : listAddress) {
@@ -167,6 +173,7 @@ public class MainActivity extends AppCompatActivity implements BluetoothAdapter.
                         }
                     }
                     if(addMaddress){
+                        Log.d(TAG, "ACTION_FOUND: " + device.getName() + " address: "+ device.getAddress());
                         listAddress.add(device.getAddress());
                         addMaddress = false;
                     }
